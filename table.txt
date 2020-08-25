@@ -1,0 +1,55 @@
+create table user(id  varchar(20) PRIMARY KEY,
+	          name VARCHAR(20) NOT NULL,
+	          pw VARCHAR(20) NOT NULL,    //다음엔 해시 평문 pw말고 해시 적용해서 저장하도록 해보자.
+	          tel VARCHAR(20),
+	          address VARCHAR(1000),
+	          crops VARCHAR(50),
+  	          area varchar(1000)
+) ENGINE=INNODB;
+
+
+
+create table kind(name varchar(20) PRIMARY KEY,
+		class varchar(20),
+		start varchar(20),
+		end varchar(20),
+		img_path varchar(30)
+) ENGINE=INNODB;
+
+create table admin(
+	id varchar(20) primary key,
+	pw varchar(20) not null,
+	name varchar(20),
+	dept varchar(20)
+) ENGINE=INNODB;
+
+create table sowing(
+	id int primary key auto_increment,
+	reg_date varchar(20),
+	width int,
+	uid varchar(20),
+	address varchar(20),
+	crop varchar(20),
+	permit_date varchar(20),
+	foreign key(uid) references user(name)
+)ENGINE=INNODB;
+
+create table harvesting(
+	id int primary key auto_increment,
+	uid varchar(20),
+	crop varchar(20),
+	width int,
+ 	foreign key(uid) references user(name)
+)ENGINE=INNODB;
+
+
+create table log(
+	crop varchar(20),
+	keyword varchar(20),
+	address varchar(30),
+ 	reg_date varchar(30),
+	real_date varchar(30),
+	value varchar(20),
+	des varchar(40),
+	foreign key(uid) references user(name)
+) ENGINE=INNODB;
