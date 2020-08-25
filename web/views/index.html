@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <meta charset="utf-8">
+
+        <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+        
+    </head>
+    <body>
+        <header>
+            <span id="hname"><a href="index.html">농작물 경작 정보 시스템</a> </span>
+            <span id="log"><a id="logbutton" href="login.html">Login</a></span>
+        
+        </header>
+        <nav>
+            <div class="menu">
+            <div class="dropmenu">
+                <button class="m1"><a href="m1.html">작물신청신고</a></button>
+       
+                <button class="m1"><a href="m2.html">통계 자료</a></button>
+             
+                
+               
+                <button class="m1"><a href="m4.html">마이 페이지</a></button>
+               </div>
+        </nav>
+        <section>
+            <div class = "front" style="text-align: center;">
+                <img src="images/main.png">
+            </div>
+        </section>
+            
+        <script>
+            $(document).ready(function(){
+                function test(){
+                    $.getJSON('http://localhost:3000/test', function(data){
+                       if(data){
+                        var bu =  document.getElementById("logbutton");
+                        bu.innerHTML="LogOut";
+                        bu.href="http://localhost:3000/logout";
+                        }
+                    })
+                }
+                test();
+            })    
+            
+        
+        </script>
+    </body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <meta charset="utf-8">
+
+        <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+        <style>
+            td, th{
+                border-bottom: 1px solid grey;
+                text-align: center;
+            }
+            th{
+                font-size: 2em;
+            }
+            tr:hover{
+                background: rgb(184, 184, 184);
+            }
+            span#paddress{
+                width : 20em;
+            }
+            input[type=checkbox]{
+                width : 20px;
+            }
+ 
+  
+        </style>
+    </head>
+    <body>
+        <header>
+            <span id="hname"><a href="adminm4.html">농작물 경작 정보 시스템</a> </span>
+            <span id="adminn"></span>
+        
+        </header>
+        <nav>
+            <div class="menu">
+            <div class="dropmenu">
+                <button class="m1"><a href="adminm1.html">작물신청현황</a></button>
+       
+                <button class="m1"><a href="adminm2.html">파종신청허가</a></button>
+             
+                <button class="m1"><a href="adminm4.html">마이 페이지</a></button>
+               </div>
+        </nav>
+        <section>
+            <div class = "front">
+                <span id="test"> 파종신청허가</span>
+                <form>
+                    <input type="text" id="searchcrop" placeholder="작물명">
+                    <input type="button" style="width:60px; background:rgb(159, 219, 159)" onclick="search()" value="검색">
+                </form>
+             
+                <form action="/permit" method="post">
+                <input type="submit" style="width:60px" value="허가"  style="position:relative; left:500px;">
+
+               
+                <div id= "showmain">
+                    <table>
+                        <thead><th>ID</th><th>신고일</th><th>작물명</th><th>면적</th><th>위치</th></thead>
+                        <tbody id="mymy">
+
+                        </tbody>
+                    </table>
+                </form>
+
+   
+            </div>
+        </section>
+           
+        <script>
+            var m;
+            $(document).ready(function(){
+                function test(){
+                    $.getJSON('http://localhost:3000/forpermit', function(data){
+                        var t = document.getElementById("mymy");
+                        t.innerHTML = "<ul>";
+                        m = "";
+                        $(data).each(function(index, item){
+                            m += `<tr><td>${item.id}</td>`;
+                            m += `<td>${item.reg_date}</td>`;
+                            m += `<td>${item.crop}</td>`;
+                            m += `<td>${item.width}</td>`;
+                            m += `<td>${item.address}</td>`;
+                            m+=`<td><input name="myid" type="checkbox" value="${item.id}"></td>`
+                            m+=`</tr>`;
+                        });
+                         t.innerHTML += m;
+                    })
+                }
+                test();
+            })    
+
+            function search(){
+                let selectcrop = document.getElementById("searchcrop").value;
+                searchAjax('http://localhost:3000/searchpermit', selectcrop);
+            }
+
+            function searchAjax(url, data){
+                let message = "";
+                m = "";
+                var t = document.getElementById("mymy");
+                data= {"crop" : data};
+               data = JSON.stringify(data);
+               
+               var oReq = new XMLHttpRequest();
+               oReq.open('post',url);
+               oReq.setRequestHeader('Content-Type', "application/json")// json 형태로 보낸다
+               oReq.send(data);
+               oReq.addEventListener('load', function(){
+                  var result = JSON.parse(oReq.responseText);
+                  r=result;
+                  console.log(r);
+           
+                  for(let i = 0; i < r.length; i++){
+                        m += `<tr><td>${r[i].id}</td>`;
+                            m += `<td>${r[i].reg_date}</td>`;
+                            m += `<td>${r[i].crop}</td>`;
+                            m += `<td>${r[i].width}</td>`;
+                            m += `<td>${r[i].address}</td>`;
+                            m+=`<td><input name="myid" type="checkbox" value="${r[i].id}"></td>`
+                            m+=`</tr>`;
+                  }
+                  t.innerHTML = m;
+                    
+            })
+            }
+
+            
+        
+        </script>
+    </body>
+</html>

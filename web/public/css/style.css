@@ -1,0 +1,257 @@
+body{
+    background-color: rgb(255, 255, 255);
+}
+body a{
+    text-decoration: none;
+}
+body a{
+    color: white;
+}
+
+span#hname{
+    font-size: 2.4em;
+    color:rgb(0, 88, 62);
+    text-shadow: 0px 0px 2px black;
+    font-weight :bold;
+}
+#hname a, #hname a:visited{
+    color:rgb(0, 88, 62);
+}
+
+span#log a{
+    float: right;
+    border : 1px solid rgb(61, 104, 61);
+    border-radius : 10px;
+    background:rgb(61, 104, 61);
+    width: 70px;
+    display: inline-block;
+    color:white;
+    font-size: 20px;
+    text-align : center;
+    text-decoration: none;
+}
+
+div.log input{
+    transition: transform 1s;
+    text-align: center;
+}
+
+div.log input:focus{
+    transform: scaleX(1.2);
+    background-color: aliceblue;
+}
+
+span.can{
+    display:block;
+    width: 8em;
+    text-align: left;
+    font-size: 1.5em;
+}
+.submenu{
+    display: inline-box;
+    position : absolute;
+    width : 150px;
+    background-color: rgb(181, 238, 214);
+    height : 150%;
+}
+.submenu ul{
+    list-style-type: none;
+    text-align : left;
+    padding-left : 0px;
+    margin-left : 9px;
+    font-size : 20px;
+}
+.submenu li{
+    margin-bottom : 10px;
+}
+.submenu li:hover, .submenu a:hover{
+   background-color: rgb(61, 104, 61);
+   color:white;
+}
+.submenu a{
+    color:black;
+    font-size: 20px;
+}
+.arti{
+    position : absolute;
+    left : 220px; top : 50px;
+}
+
+
+header{
+    top: 20px;
+    height: 80px;
+    margin-top: 30px; margin-left : 20px;
+
+}
+
+div.menu{
+    border : 2px solid rgb(0, 0, 0);
+    border-radius: 10px;
+    background-color:rgb(61, 104, 61);
+    height: 50px;
+}
+div.dropmenu{
+    display: inline-block;
+    
+    position : absolute;
+}
+
+
+div.dropdown-content{
+  display:none;
+  position :relative;
+  background-color: rgb(61, 104, 61);
+  height: 80px; width : 6em;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  padding-top: 8px;
+  text-align: center;
+  border: 2px solid black;
+
+}
+div.dropmenu:hover div.dropdown-content{
+    display:inline-block;
+    position: absolute;
+    top : 140px; left: 20px;
+}
+
+
+
+div.dropdown-content a{
+    color:white;
+    display: block;
+    text-decoration: none;
+    padding-bottom : 5px;
+}
+
+div.dropdown-content a:hover{
+    color:white;
+    text-shadow: 0px 0px 2px black;
+}
+
+nav button{
+    border: 0px;
+    position: relative;
+    top : 7px;
+    background-color:rgb(61, 104, 61);
+    color:white;
+    font-size: 25px;
+    padding-left: 200px;
+}
+
+section{
+    position:absolute;
+    width: 100%; height: 100%;
+    background-color:white;
+}
+
+
+nav button:active, nav button:focus{
+    border: 0px solid white;
+
+}
+
+nav button:hover{
+    color:black;
+}
+
+div.front{
+    border-radius : 10px;
+    border : 2px solid rgb(121, 170, 121);
+    width : 99%;
+    height: 150%;
+}
+
+input{
+    border: 2px solid grey;
+    width : 500px; height : 50px;
+    font-size: 20px;
+}
+input[type=submit]{
+    background-color: rgb(121, 170, 121);
+    color:white;
+    font-size: 20px;
+    width: 150px;
+}
+
+.regform input{
+    height : 30px;
+    margin-bottom: 10px;
+    border-radius: 0px;
+    width : 20em;
+    border: 1px solid grey;
+}
+
+.regform label{
+    
+}
+
+.val{
+   font-size : 20px; 
+   border: 2px solid black;
+}
+
+#displayreg input{
+    font-size: 15px;
+    border: none;
+}
+
+#displayreg th, td{
+    width : 10em;
+}
+
+#displayreg th{
+    background-color: rgb(189, 189, 253);
+    border-bottom : 5px double black;
+}
+
+#realtime th, td{
+    width : 12em;
+    font-size: 1.2em;
+}
+
+#realtime th{
+    background-color: rgb(255, 255, 255);
+    border-bottom : 5px double black;
+}
+
+div#colors span{
+    height : 20px;
+     width :20px; 
+     background-color:#B9B9B9; 
+     display: inline-block; margin-right: 5px;
+}
+
+
+.memo input{
+    width: 8em; height: 1.5em;
+    font-size:16px;
+    border-radius: 2px;
+    border: 1px solid black;
+}
+
+.memo input[type=submit]{
+    width: 5em; height:1.5em;
+}
+
+.memosearch input{
+    border-radius: 2px;
+    width: 8em; height: 1.5em;
+    border: 1px solid black;
+}
+
+.memo button{
+    border-radius : 5px;
+    border: 5px  groove rgba(0, 87, 51, 0.315);
+
+    font-size: 20px;
+    width : 100px;
+    margin-right: 20px;
+    color:white;
+    background: rgb(54, 54, 54);
+}
+
+.memo button:active{
+    background-color: rgb(160, 160, 160);
+}

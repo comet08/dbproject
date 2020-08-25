@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <meta charset="utf-8">
+        <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+        <style>
+            td{
+                width: 25px;
+                text-align: center;
+            }
+            tbody{
+                width: 150px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <span id="hname"><a href="index.html">농작물 경작 정보 시스템</a> </span>
+            <span id="log"><a id="logbutton" href="login.html">Login</a></span>
+        
+        </header>
+        <nav>
+            <div class="menu">
+            <div class="dropmenu">
+                <button class="m1"><a href="m1.html">작물신청신고</a></button>
+       
+                <button class="m1"><a href="m2.html">통계 자료</a></button>
+             
+               
+               
+                <button class="m1"><a href="m4.html">마이 페이지</a></button>
+               </div>
+        </nav>
+        <section>
+            
+            <div class = "front">
+                    <div class = "submenu">
+                        <ul>
+                            <li style="background:rgb(61, 104, 61); "><a href="m2.html" style="color:white;">통계자료</a></li>
+                            
+                        </ul>
+            
+                        </div>
+                    <div class= "arti">
+                      <form>
+                          <input type="text" id="crop" placeholder="작물명" style="text-align: center;"> 
+                         
+                          <input type="button" onclick = "search()" value="조회" style="width : 5em;">
+                      </form>
+            </div>
+            <div class="arti" style="position:relative; top : 150px;">
+                <br><Br>
+                    <canvas style="display: inline-block;"id="myChart" width="500" height="300" style="background: aliceblue;"></canvas>
+                    <canvas style="display: inline-block;" id="pricechart" width="500" height="300" style="background: aliceblue;"></canvas>
+                <br><br>
+                <table border="1" width="500" style="border-collapse: collapse;">
+
+                        <thead>
+                            <th>년도</th><th>재배면적</th><th>수확량</th><th>소비량</th><th>판매가격</th><th>단위</th>
+                        </thead>
+                        <tbody id="body">
+                            
+                        </tbody>
+                    </table>
+                    <br><br>
+                   
+            </div>
+           
+        
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+        <script>
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var pctx = document.getElementById('pricechart').getContext('2d');
+                var data = {
+                    labels: ["2016","2017","2018","2019"],
+                    datasets:[{
+                        label: "소비량",
+                        data: [0,0,0,0],
+                        borderColor : "blue",
+                        fill:false
+                    },
+                    {
+                        label: "수확량",
+                        data: [0,0,0,0],
+                        borderColor : "green",
+                        fill:false
+                    }
+                ]
+                }
+                var data2 = {
+                    labels: ["2016","2017","2018","2019"],
+                    datasets:[{
+                        label: "판매가격",
+                        data: [0,0,0,0],
+                        borderColor : "black",
+                        fill:false
+                    }
+                    
+                ]
+                }
+
+                var options = {
+                    animation: {
+                        animateScale: true
+                    },
+                    responsive: false,
+                    scales: {
+                        yAxes: [
+                            {
+                                ticks: {
+                                    beginAtZero: true                                                                    
+                                }
+                            }
+                        ]
+                    }
+                };
+
+                var myLineChart = new Chart(ctx, {
+                    type: 'line',
+                    data: data,
+                    options: options
+                });
+
+                var priceLineChart = new Chart(pctx, {
+                    type: 'line',
+                    data: data2,
+                    options: options
+                });
+
+
+                </script>
+
+
+        <script>
+            $(document).ready(function(){
+                function test(){
+                    $.getJSON('http://localhost:3000/test', function(data){
+                       if(data){
+                        var bu =  document.getElementById("logbutton");
+                        bu.innerHTML="LogOut";
+                        bu.href="http://localhost:3000/logout";
+                        }
+                    })
+                }
+                test();
+            })    
+
+            function search(){
+                let crop = document.getElementById("crop").value;
+                searchAjax('http://localhost:3000/searchdata', crop);
+
+            }
+ 
+            function searchAjax(url, crop){
+              let message = "";
+               var searchdata = {"crop" : crop};
+               searchdata = JSON.stringify(searchdata);
+                let set1 = [], set2=[], set3=[];
+               var oReq = new XMLHttpRequest();
+               oReq.open('post',url);
+               oReq.setRequestHeader('Content-Type', "application/json")// json 형태로 보낸다
+               oReq.send(searchdata);
+               oReq.addEventListener('load', function(){
+                  var result = JSON.parse(oReq.responseText);
+                  console.log(result);
+                  let m="";
+                  for(let i = 0; i < (result.length); i++ ){
+                        set1.push(result[i].harvest);
+                        set2.push(result[i].consum);
+                        set3.push(result[i].price);
+                        m+=`<tr><td>${result[i].year}</td><td>${result[i].width}</td><td>${result[i].harvest}</td><td>${result[i].consum}</td><td>${result[i].price}</td><td>${result[i].unit}</td></tr>`
+                  }
+                
+                    data.datasets = [{
+                                label: "소비량",
+                                data: set2,
+                                borderColor : "blue",
+                                fill:false
+                    }, 
+                    {label: "수확량",
+                                data: set1,
+                                borderColor : "green",
+                                fill:false
+                    }];
+                    console.log(data);
+
+                    data2.datasets[0] = {
+                                label: "판매가격",
+                                data: set3,
+                                borderColor : "black",
+                                fill:false
+                    }
+                    document.getElementById("body").innerHTML = m;
+
+                    myLineChart.destroy();
+                    myLineChart = new Chart(ctx, {
+                        type: 'line',
+                        data: data,
+                        options: options
+                    });
+
+                    priceLineChart.destroy();
+                    priceLineChart = new Chart(pctx, {
+                        type: 'line',
+                        data: data2,
+                        options: options
+                    });
+                })
+        }
+        
+        </script>
+    </body>
+</html>

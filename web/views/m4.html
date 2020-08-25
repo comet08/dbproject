@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <meta charset="utf-8">
+        <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+
+
+    </head>
+    <body>
+        <header>
+            <span id="hname"><a href="index.html">농작물 경작 정보 시스템</a> </span>
+            <span id="log"><a  id="logbutton" href="login.html">Login</a></span>
+        
+        </header>
+        <nav>
+            <div class="menu">
+            <div class="dropmenu">
+                <button class="m1"><a href="m1.html">작물신청신고</a></button>
+       
+                <button class="m1"><a href="m2.html">통계 자료</a></button>
+             
+             
+               
+                <button class="m1"><a href="m4.html">마이 페이지</a></button>
+               </div>
+        </nav>
+        <section>
+            <div class = "front">
+                    <div class = "submenu">
+                            <ul>
+                                <li style="background:rgb(61, 104, 61); "><a href="m4.html" style="color:white;" >내정보</a></li>
+                                <li ><a href="4-2.html">파종신청현황</a></li>
+                                <li><a href="4-3.html">수확신청현황</a></li>
+                                <li><a href="4-4.html">경작기록</a></li>
+                                
+                            </ul>
+                    </div>
+                    <div class="arti" style="font-size: 20px;">
+                    
+                        이름:&nbsp; <span id="myname"></span><br>
+                        Tel:&nbsp; <span id="mytel"> </span><br><br><br>
+
+                        <hr>
+                        농가정보
+                        <br><br>
+                        <table style="font-size:12px; text-align: center;" width="500px">
+                            <thead>
+                                <tr><th>위치</th><th>면적</th></tr>
+                            </thead>
+                            <tbody id="mymy">
+
+                            </tbody>
+                        </table>
+                        <br><br>
+                        
+                        재배 작물: &nbsp; <span id="mycrops"></span>
+                        
+                        <br><br><br>
+                        농작지 정보 추가
+                        <br>
+                        <form action="/addaddress" method="POST">
+                        <input type="text" id="sample5_address" name="address"></label>
+                            <input type="button" onclick="sample5_execDaumPostcode()" value="주소 검색" style="width:80px;font-size: 15px; background: black; color:white;" >
+                        <br>
+                        <input type="number" placeholder="면적" name="width">
+                            &emsp;
+                        <input type="submit" value="추가">
+                        </form>
+                    </div>
+
+                    
+            </div>
+        </section>
+
+
+        <script>
+            $(document).ready(function(){
+                function my(){
+                    $.getJSON('http://localhost:3000/user', function(data){
+                        if(!data){
+                            document.location.href="login.html";
+                        }
+                        $(data).each(function(index, item){
+
+                            document.getElementById("mytel").innerHTML = item.tel;
+                            document.getElementById("myname").innerHTML = item.name;
+                            let loc = new String(item.address);
+                            loc = loc.split(",");
+                            let width = new String(item.area);
+                            width = width.split(",");
+                            let m="";
+                            for(let i=0; i<loc.length; i++){
+                                m+= `<tr><td>${loc[i]}</td><td>${width[i]}</td></tr>`;
+                            }
+                            document.getElementById("mymy").innerHTML = m;
+                            document.getElementById("mycrops").innerHTML = item.crops;
+                        })
+                    })
+                }
+                function test(){
+                    $.getJSON('http://localhost:3000/test', function(data){
+                       if(data){
+                        var bu =  document.getElementById("logbutton");
+                        bu.innerHTML="LogOut";
+                        bu.href="http://localhost:3000/logout";
+                        }
+                    })
+                }
+                my();
+                test();
+            })    
+            
+        
+        </script>
+
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ffa849a695e16ba6cdff28bde9f7866e&libraries=services"></script>
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+<script>
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+        mapOption = {
+            center: new daum.maps.LatLng(37.537187, 127.005476), // 지도의 중심좌표
+            level: 5 // 지도의 확대 레벨
+        };
+
+    //지도를 미리 생성
+    var map = new daum.maps.Map(mapContainer, mapOption);
+    //주소-좌표 변환 객체를 생성
+    var geocoder = new daum.maps.services.Geocoder();
+    //마커를 미리 생성
+    var marker = new daum.maps.Marker({
+        position: new daum.maps.LatLng(37.537187, 127.005476),
+        map: map
+    });
+
+
+    function sample5_execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                var addr = data.address; // 최종 주소 변수
+
+                // 주소 정보를 해당 필드에 넣는다.
+                document.getElementById("sample5_address").value = addr;
+                // 주소로 상세 정보를 검색
+                geocoder.addressSearch(data.address, function(results, status) {
+                    // 정상적으로 검색이 완료됐으면
+                    console.log("정상변환");
+                    if (status === daum.maps.services.Status.OK) {
+
+                        var result = results[0]; //첫번째 결과의 값을 활용
+
+                        // 해당 주소에 대한 좌표를 받아서
+                        var coords = new daum.maps.LatLng(result.y, result.x);
+                        // 지도를 보여준다.
+                        mapContainer.style.display = "inline-block";
+                        map.relayout();
+                        // 지도 중심을 변경한다.
+                        map.setCenter(coords);
+                        // 마커를 결과값으로 받은 위치로 옮긴다.
+                        marker.setPosition(coords)
+                    }
+                });
+            }
+        }).open();
+    }
+    </script>
+    </body>
+</html>

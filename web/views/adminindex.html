@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <meta charset="utf-8">
+
+        <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+        
+    </head>
+    <body>
+        <header>
+            <span id="hname"><a href="adminindex.html">농작물 경작 정보 시스템</a> </span>
+            <span id="adminn"></span>
+        
+        </header>
+        <nav>
+            <div class="menu">
+            <div class="dropmenu">
+                <button class="m1"><a href="adminm1.html">작물신청현황</a></button>
+       
+                <button class="m1"><a href="adminm2.html">파종신청허가</a></button>
+             
+                <button class="m1"><a href="adminm4.html">마이 페이지</a></button>
+               </div>
+        </nav>
+        <section>
+            <div class = "front">
+                <span id="test">농작물 파종시기</span>
+                <table id= "showmain"></table>
+            </div>
+        </section>
+            
+        <script>
+            $(document).ready(function(){
+                function test(){
+                    $.getJSON('http://localhost:3000/test', function(data){
+                       if(data){
+                        var bu =  document.getElementById("logbutton");
+                        bu.innerHTML="LogOut";
+                        bu.href="http://localhost:3000/logout";
+                        }
+                    })
+                }
+                test();
+            })    
+            
+        
+        </script>
+    </body>
+</html>

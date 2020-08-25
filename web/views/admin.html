@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <meta charset="utf-8">
+        
+        <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+        <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+
+</script>
+
+    <style>
+        body{
+            background: rgb(61, 104, 61);
+        }
+    </style>
+    </head>
+    <body>
+        <header>
+            <span id="hname"><a href="index.html" style="color:white">농작물 경작 정보 시스템</a> </span>
+        
+        </header>
+        <nav>
+
+        </nav>
+        <section>
+            <div class = "front">
+                <div class="log" style="position: absolute; top : 30%; left: 40%;" >
+                <form action="/adminlogin" id="log" name="log" method="POST">
+                    <input type="text" placeholder="ID" name = "adminid"><br><br>
+                    <input type="password" placeholder="PASSWORD" name="adminpw"><br><br>
+                    <input type="submit" value="Login" style="position : absolute; left : 40%;">
+                </form> 
+                <br>
+            </div>
+            <div class="log">
+                <div id="out"></div>
+
+            </div>
+            
+        </div>
+        </section>
+
+        <script>
+             $(document).ready(function(){
+                function my(){
+                    $.getJSON('http://localhost:3000/login', function(data){
+                        document.getElementById("#out").innerHTML = data;
+                        document.getElementById("#log").style.visibility = "hidden";
+                    })
+                }
+               // my();
+            })    
+        </script>
+    </body>
+</html>

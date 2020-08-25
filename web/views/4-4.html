@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <meta charset="utf-8">
+
+        <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    </head>
+    <body>
+        <header>
+            <span id="hname"><a href="index.html">농작물 경작 정보 시스템</a> </span>
+            <span id="log"><a id="logbutton" href="login.html">Login</a></span>
+        
+        </header>
+        <nav>
+            <div class="menu">
+            <div class="dropmenu">
+                <button class="m1"><a href="m1.html">작물신청신고</a></button>
+       
+                <button class="m1"><a href="m2.html">통계 자료</a></button>
+             
+              
+               
+                <button class="m1"><a href="m4.html">마이 페이지</a></button>
+               </div>
+        </nav>
+        <section>
+            <div class = "front">
+                    <div class = "submenu">
+                            <ul>
+                                <li ><a href="m4.html"  >내정보</a></li>
+                                <li ><a href="4-2.html">파종신청현황</a></li>
+                                <li><a href="4-3.html">수확신청현황</a></li>
+                                <li style="background:rgb(61, 104, 61); "><a href="4-4.html" style="color:white;">경작기록</a></li>
+                                
+                            </ul>
+                    </div>
+                    <div class="arti">
+                    <div class="memo">
+                        <span style="font-size: 20px;">경작기록:</span>
+                        <br><br>
+
+                        <button type="button" onclick="change(this)">파종</button>
+                        <button type="button" onclick="change(this)">비료</button>
+                        <button type="button" onclick="change(this)">병충해</button>
+                        <button type="button" onclick="change(this)">수확</button>
+                        <button type="button" onclick="change(this)">판매</button>
+
+                        <br><br><hr>
+                        <input type="text" id="crop" placeholder="작물">
+                        <input type="text" id="keyword" placeholder="키워드">
+                        <input type="text" id="address" placeholder="위치">
+                        <input type="date" id="date"placeholder="날짜"><br><br>
+                        
+                        <input id="value" type="text" placeholder=" ">
+                        <input id="des" type="text" placeholder="내용" style="width: 20em;">
+                        <input type="button" onclick="selecting()"  value="등록">
+
+                    </div>
+                    <br><hr>
+                    <table  border="1" style="border-collapse: collapse; ">
+                            <thead style="border-bottom: 3px solid black;">
+                                <th>등록일</th><th>발생일</th><th>작물명</th><th>위치</th><th>키워드</th><th>value</th><th>내용</th>
+                            </thead>
+                            <tbody id="logtb">
+                                
+                            </tbody>
+                        </table>
+
+                </div>
+                <div class="arti" style="left: 1000px; top : 8%;" >
+                    검색필터
+                    <div class="memosearch"> 
+                    <input type="month" placeholder="month" id="selectdate"><br><br>
+                    <input type="text" placeholder="키워드" id="selectkey"><br><br>
+                    <input type="text" placeholder="작물명" id="selectcrop"><br><br>
+                    <input type="button" onclick="selectlog()" value="검색" style="position:relative;"><br>
+                </div></div>
+ 
+
+
+            </div>
+        </section>
+        <script>
+        $(document).ready(function(){
+                function test(){
+                    $.getJSON('http://localhost:3000/test', function(data){
+                       if(data){
+                        var bu =  document.getElementById("logbutton");
+                        bu.innerHTML="LogOut";
+                        bu.href="http://localhost:3000/logout";
+                        }
+                    })
+                }
+                function log(){
+                    $.getJSON('http://localhost:3000/showlog', function(data){
+                        let tb = document.getElementById("logtb");
+                        let message="";
+                        $(data).each(function(index, item){
+                            message+=`<tr><td>${item.reg_date}</td><td>${item.real_date}</td><td>${item.crop}</td><td>${item.address}</td><td>${item.keyword}</td><td>${item.value}</td><td>${item.des}</td></tr>`;
+                            
+                        })
+                        tb.innerHTML = message;
+                    })
+                }
+                test();
+                log();
+
+
+            })   
+            let arr=[];
+             function selecting(){
+                let crop = document.getElementById("crop").value;
+                let keyword = document.getElementById("keyword").value;
+                let address = document.getElementById("address").value;
+                let real_date = document.getElementById("date").value;
+                let value = document.getElementById("value").value;
+                let des = document.getElementById("des").value;
+                arr = [crop, keyword, address, real_date, value, des];
+                selectAjax('http://localhost:3000/mylog', arr);
+            }
+
+            function selectlog(){
+                let selectcrop = document.getElementById("selectcrop").value;
+                let selectkey = document.getElementById("selectkey").value;
+                let selectdate = document.getElementById("selectdate").value;
+               
+                var arr = [selectdate, selectkey, selectcrop];
+                searchAjax('http://localhost:3000/searchlog', arr);
+            }
+
+            function searchAjax(url, data){
+               
+                let message = "";
+               var data = {"selectdate" : data[0],
+                            "selectkey" : data[1],
+                            "selectcrop" : data[2]
+                };
+               data = JSON.stringify(data);
+               let tb = document.getElementById("logtb");
+               var oReq = new XMLHttpRequest();
+               oReq.open('post',url);
+               oReq.setRequestHeader('Content-Type', "application/json")// json 형태로 보낸다
+               oReq.send(data);
+               oReq.addEventListener('load', function(){
+                  var result = JSON.parse(oReq.responseText);
+                  r = result;
+                  for(let i = 0; i < r.length; i++)
+                  message+=`<tr><td>${r[i].reg_date}</td><td>${r[i].real_date}</td><td>${r[i].crop}</td><td>${r[i].address}</td><td>${r[i].keyword}</td><td>${r[i].value}</td><td>${r[i].des}</td></tr>`;
+                  tb.innerHTML = message;
+                    
+            })
+            }
+
+
+            var r;
+            function selectAjax(url, data){
+                let n = document.getElementById("cropname");
+                let message = "";
+               var data = {"crop" : data[0],
+                            "keyword" : data[1],
+                            "address" : data[2],
+                            "real_date" : data[3],
+                            "value" : data[4],
+                            "des" : data[5],
+                };
+               data = JSON.stringify(data);
+               let tb = document.getElementById("logtb");
+               var oReq = new XMLHttpRequest();
+               oReq.open('post',url);
+               oReq.setRequestHeader('Content-Type', "application/json")// json 형태로 보낸다
+               oReq.send(data);
+               oReq.addEventListener('load', function(){
+                   alert("등록 완료");
+                  var result = JSON.parse(oReq.responseText);
+                  r = result[0];
+                  for(let i = 0; i < r.length; i++)
+                  message+=`<tr><td>${r[i].reg_date}</td><td>${r[i].real_date}</td><td>${r[i].crop}</td><td>${r[i].address}</td><td>${r[i].keyword}</td><td>${r[i].value}</td><td>${r[i].des}</td></tr>`;
+                  tb.innerHTML = message;
+                  document.location.href="4-4.html"                      
+            })
+            }
+           
+
+            function change(obj){
+                let c = document.getElementById("value");
+                if(obj.innerHTML == "파종")
+                    c.placeholder="파종면적";
+                else if(obj.innerHTML == "비료")
+                    c.placeholder="종류";
+                else if(obj.innerHTML == "병충해")
+                    c.placeholder="피해량";
+                else if(obj.innerHTML == "수확")
+                    c.placeholder="수확량";
+                else if(obj.innerHTML == "판매")
+                    c.placeholder="판매량";
+                document.getElementById("keyword").value=obj.innerHTML;
+            }
+        
+        </script>
+    </body>
+</html>

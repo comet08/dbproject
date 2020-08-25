@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <meta charset="utf-8">
+        
+        <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+        <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+
+</script>
+    </head>
+    <body>
+        <header>
+            <span id="hname"><a href="index.html">농작물 경작 정보 시스템</a> </span>
+            <span id="log"><a href="login.html">Login</a></span>
+        
+        </header>
+        <nav>
+            <div class="menu">
+            <div class="dropmenu">
+                <button class="m1"><a href="m1.html">작물신청신고</a></button>
+       
+                <button class="m1"><a href="m2.html">통계 자료</a></button>
+             
+              
+               
+                <button class="m1"><a href="m4.html">마이 페이지</a></button>
+               </div>
+        </nav>
+        <section>
+            <div class = "front">
+                <div class="log" style="position: absolute; top : 30%; left: 40%;" >
+                <form action="/login" id="log" name="log" method="POST">
+                    <input type="text" placeholder="ID" name = "id"><br><br>
+                    <input type="password" placeholder="PASSWORD" name="pw"><br><br>
+                    <input type="submit" value="Login" style="position : absolute; left : 50px;">
+                </form> <a href="reg.html" style="color: black;text-decoration: none; position: relative; top : 75%; left: 230px;">회원가입</a>
+                <br>
+            </div>
+
+            
+        </div>
+        </section>
+
+        <script>
+             $(document).ready(function(){
+                function my(){
+                    $.getJSON('http://localhost:3000/login', function(data){
+                        document.getElementById("out").innerHTML = data;
+                        document.getElementById("log").style.visibility = "hidden";
+                    })
+                }
+                my();
+            })    
+        </script>
+    </body>
+</html>
